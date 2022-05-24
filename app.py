@@ -99,7 +99,18 @@ def indexCustome():
     return render_template("indexCustomer.html")
 
 
+@app.route('/customerCart.html', methods=['GET'])
+def customerCart():
+    return render_template("customerCart.html")
+
+
+@app.route('/customerAbout.html', methods=['GET'])
+def customerAbout():
+    return render_template("customerAbout.html")
+
 # 廠商
+
+
 @app.route('/industy_login.html', methods=['GET'])
 def industy_login():
     return render_template("industy_login.html")
