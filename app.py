@@ -90,8 +90,13 @@ def customer_register():
         mysql.connection.commit()
         cur.close()
         del name, accountNum, password, email
-        return render_template("customer_login.html")
+        return render_template("index.html")
     return render_template("customer_register.html")
+
+
+@app.route('/indexCustomer.html', methods=['GET'])
+def indexCustome():
+    return render_template("indexCustomer.html")
 
 
 # 廠商
