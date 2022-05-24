@@ -4,49 +4,27 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-6">
-            <img src="..\static\store.png" class="card-img-top" alt="...">
+        <div class="col-sm-6">
+            <img src="..\static\store.png" alt="" width="90%">
         </div>
-        <div class="col-md-6">
-            <div class="container h-100">
-                <div class="d-flex justify-content-center h-100">
-                    <div class="user_card">
-                        <div class="d-flex justify-content-center form_container">
-                            <form>
-                                <div class="input-group mb-3">
 
-                                    <input type="text" name="" class="form-control input_user" value=""
-                                        placeholder="username">
-                                </div>
-                                <div class="input-group mb-2">
-
-                                    <input type="password" name="" class="form-control input_pass" value=""
-                                        placeholder="password">
-                                </div>
-                                <div class="form-group">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="customControlInline">
-                                        <label class="custom-control-label" for="customControlInline">Remember
-                                            me</label>
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-center mt-3 login_container">
-                                    <button type="button" name="button" class="btn login_btn">Login</button>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="mt-4">
-                            <div class="d-flex justify-content-center links">
-                                Don't have an account? <a href="industy_register.html" class="ml-2">Sign Up</a>
-                            </div>
-                        </div>
-                    </div>
+        <div class="col-sm-6">
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Name</label>
+                    <input type="text" name="name" class="form-control" id="exampleInputEmail1">
+                    <div id="emailHelp" class="form-text">We'll never share your name with anyone else.</div>
                 </div>
-            </div>
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Password</label>
+                    <input type="password" name="password" class="form-control" id="exampleInputPassword1">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
         </div>
     </div>
 </div>
+
 
 
 {% endblock %}

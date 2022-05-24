@@ -14,6 +14,7 @@ from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for
 from flask_mysqldb import MySQL
 from flask import Flask, session
+import random
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "mis"
 app.debug = True
@@ -111,14 +112,76 @@ def customerAbout():
 # 廠商
 
 
-@app.route('/industy_login.html', methods=['GET'])
+@app.route('/industy_login.html', methods=['GET', 'POST'])
 def industy_login():
+    if request.method == "POST":
+        details = request.form
+        name = str(details['name'])
+        session['name'] = details['name']
+        cur = mysql.connection.cursor()
+        command = "SELECT * FROM industy WHERE iName= '%s'"
+        cur.execute(command % name)
+        mysql.connection.commit()
+        result = cur.fetchall()
+        cur.close()
+        if len(result) > 0:
+            del result
+            return render_template("indexIndusty.html")
+        else:
+            del result
+            return render_template("industy_register.html")
+
     return render_template("industy_login.html")
 
 
-@app.route('/industy_register.html', methods=['GET'])
+@app.route('/industy_register.html', methods=['GET', 'POST'])
 def industy_register():
+    if request.method == "POST":
+        details = request.form
+        name = details['name']
+        session['name'] = details['name']
+        address = details['address']
+        password = details['password']
+        phone = details['phone']
+        x = random.randrange(1, 1000)
+        cur = mysql.connection.cursor()
+        cur.execute(
+            "INSERT INTO industy(iNo,iName,iAddress,iPhone,password) VALUES (%s,%s, %s, %s, %s)", (x, name, address, phone, password))
+        mysql.connection.commit()
+        cur.close()
+        del name, address, password, phone
+        return render_template("index.html")
     return render_template("industy_register.html")
+
+
+@app.route('/indexIndusty.html', methods=['GET'])
+def indexIndusty():
+    return render_template("indexIndusty.html")
+
+
+@app.route('/industyProduct.html', methods=['GET'])
+def industyProducty():
+    return render_template("industyProduct.html")
+
+
+@app.route('/industyUpload.html', methods=['GET'])
+def industyUpload():
+    return render_template("industyUpload.html")
+
+
+@app.route('/industyOrder.html', methods=['GET'])
+def industyOrder():
+    return render_template("industyOrder.html")
+
+
+@app.route('/industyForum.html', methods=['GET'])
+def industyForum():
+    return render_template("industyForum.html")
+
+
+@app.route('/industyChart.html', methods=['GET'])
+def industyChart():
+    return render_template("industyChart.html")
 
 
 if __name__ == '__main__':
