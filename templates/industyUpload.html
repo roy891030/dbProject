@@ -1,5 +1,36 @@
 {% extends 'baseILogin.html' %}
 
 {% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            <img src="..\static\upload.png" alt="" width="70%">
+        </div>
+
+        <div class="col-sm-6">
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Name</label>
+                    <input type="text" name="name" class="form-control" id="exampleInputEmail1" placeholder="hot dog">
+                </div>
+
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Price</label>
+                    <input type="text" name="price" class="form-control" id="exampleInputEmail1" placeholder="100">
+                </div>
+
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Expire Date</label>
+                    <input type="text" name="pExpire" class="form-control" id="exampleInputEmail1" placeholder="YYYY-MM-DD">
+                </div>
+                <div class="mb-3">
+                    <label for="formFile" class="form-label">Upload IMG</label>
+                    <input class="form-control" name="pimg" type="file" id="formFile">
+                </div>
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </form>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

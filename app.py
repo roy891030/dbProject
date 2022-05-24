@@ -164,8 +164,26 @@ def industyProducty():
     return render_template("industyProduct.html")
 
 
-@app.route('/industyUpload.html', methods=['GET'])
+################ UPLOAD的時候欄位錯亂 ################
+
+
+@app.route('/industyUpload.html', methods=['GET', 'POST'])
 def industyUpload():
+    if request.method == "POST":
+        details = request.form
+        pName = details['name']
+        session['name'] = details['name']
+        pExpire = details['pExpire']
+        price = details['price']
+        pimg = details['pimg']
+        pNo = random.randrange(1, 1000)
+        cur = mysql.connection.cursor()
+        cur.execute(
+            "INSERT INTO product(pNo,pExpire,pName,pimg,price) VALUES (%s,%s, %s, %s, %s)", (pNo, pExpire, pName, pimg, price))
+        mysql.connection.commit()
+        cur.close()
+        del pNo, pExpire, pName, pimg, price
+        return render_template("indexIndusty.html")
     return render_template("industyUpload.html")
 
 
