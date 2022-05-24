@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+
+
+<h1 class="display-3" style="text-align:center;">Choose your option</h1>
+
+<br>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card" style="width: 100%;">
+                <img src="..\static\customer.png" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">CUSTOMER</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+                        content.</p>
+                    <a href="customer_login.html" class="btn btn-primary">LOG IN</a>
+                    <a href="customer_register.html" class="btn btn-success">REGISTER</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card" style="width: 100%;">
+                <img src="..\static\store.png" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">INDUSTY</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+                        content.</p>
+                    <a href="industy_login.html" class="btn btn-primary">LOG IN</a>
+                    <a href="industy_register.html" class="btn btn-success">REGISTER</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+{% endblock %}
