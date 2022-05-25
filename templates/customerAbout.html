@@ -2,4 +2,64 @@
 
 {% block content %}
 
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h1 class="display-4">{{ user_template }}'s ABOUT</h1>
+                <p class="lead">you can alter your about in this page</p>
+            </div>
+        </div>
+
+        <br>
+        <br>
+        <br>
+
+<div class="container">
+    <div class="row">
+
+        <div class="col-sm-6">
+            <img src="..\static\about.png" alt="" width="50%">
+        </div>
+
+        <div class="col-sm-6">
+            <table class="table" style="color: black;">
+                <tbody>
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                                DETAIL
+                            </th>
+                        </tr>
+                    </thead>
+                <tbody>
+                    {% for user in consumer %}
+                    <tr>
+                        <td scope="row">id</td>
+                        <td scope="row">{{user[0]}}</td>
+                    </tr>
+                    <tr>
+                        <td scope="row">name</td>
+                        <td scope="row">{{user[1]}}</td>
+                    </tr>
+                    <tr>
+                        <td scope="row">accNum</td>
+                        <td scope="row">{{user[2]}}</td>
+                    </tr>
+                    <tr>
+                        <td scope="row">psw</td>
+                        <td scope="row">{{user[3]}}</td>
+                    </tr>
+                    <tr>
+                        <td scope="row">mail</td>
+                        <td scope="row">{{user[4]}}</td>
+                    </tr>
+                    <tr>
+                        <td scope="row">violate</td>
+                        <td scope="row">{{user[5]}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -53,6 +53,7 @@ def index_2():
 
 
 # 顧客
+# session 中 name 有名字 cNo 有它的代碼
 @app.route('/customer_login.html', methods=['GET', 'POST'])
 def customer_login():
     if request.method == "POST":
@@ -65,12 +66,23 @@ def customer_login():
         mysql.connection.commit()
         result = cur.fetchall()
         cur.close()
+
         if len(result) > 0:
+            # 這邊寫個session撈資料庫的user id
+            cur = mysql.connection.cursor()
+            command = "SELECT cNo From cunsumer WHERE cunsumer.cName = '%s'"
+            cur.execute(command % name)
+            mysql.connection.commit()
+            cNo = cur.fetchall()
+            cur.close()
+            session['cNo'] = int(cNo[0][0])
+            cur.close()
             del result
-            return render_template("indexCustomer.html")
+            return redirect(url_for("indexCustome",))
+
         else:
             del result
-            return render_template("customer_register.html")
+            return redirect(url_for("customer_register",))
 
     return render_template("customer_login.html")
 
@@ -80,7 +92,6 @@ def customer_register():
     if request.method == "POST":
         details = request.form
         name = details['name']
-        session['name'] = details['name']
         accountNum = details['accountNum']
         password = details['password']
         email = details['email']
@@ -97,7 +108,8 @@ def customer_register():
 
 @app.route('/indexCustomer.html', methods=['GET'])
 def indexCustome():
-    return render_template("indexCustomer.html")
+    user = session['name']
+    return render_template("indexCustomer.html", user=user)
 
 
 @app.route('/customerCart.html', methods=['GET'])
@@ -105,9 +117,41 @@ def customerCart():
     return render_template("customerCart.html")
 
 
-@app.route('/customerAbout.html', methods=['GET'])
+@app.route('/customerAbout.html', methods=['GET', 'POST'])
 def customerAbout():
-    return render_template("customerAbout.html")
+    user = session['name']
+    # if request.method == "POST":
+    #     details = request.form
+    #     name = details['name']
+    #     session['name'] = details['name']
+    #     accountNum = details['accountNum']
+    #     password = details['password']
+    #     email = details['email']
+    #     print(email)
+    #     cur = mysql.connection.cursor()
+    #     cur.execute(
+    #         "INSERT INTO cunsumer(cName,password,accountNum,email) VALUES (%s, %s, %s, %s)", (name, password, accountNum, email))
+    #     mysql.connection.commit()
+    #     cur.close()
+    #     del name, accountNum, password, email
+    #     return render_template("indexCustomer.html")
+    if request.method == "GET":
+        cur = mysql.connection.cursor()
+        cNo = session['cNo']
+        command = "SELECT * From cunsumer WHERE cunsumer.cNo = '%s'"
+        cur.execute(command % cNo)
+        labels = cur.fetchall()
+        mysql.connection.commit()
+        cur.close()
+        return render_template("customerAbout.html", user_template=user, consumer=labels)
+    else:
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM cunsumer")
+        labels = cur.fetchall()
+        mysql.connection.commit()
+        cur.close()
+        return render_template("customerAbout.html", user_template=user, consumer=labels)
+
 
 # 廠商
 
