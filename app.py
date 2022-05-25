@@ -15,6 +15,14 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_mysqldb import MySQL
 from flask import Flask, session
 import random
+
+#######待辦事項########
+# industy上傳的資料show在他的product，並且解決 photo 還有欄位錯誤問題 (hard)
+# 欄位錯誤的問題可能是html 表單設計順序要改的跟後端一樣
+# industy index 中可以顯示他想要的七個功能 (easy)
+# 將所有industy show在customer的index中 (mid)
+#######待辦事項########
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "mis"
 app.debug = True
@@ -120,21 +128,21 @@ def customerCart():
 @app.route('/customerAbout.html', methods=['GET', 'POST'])
 def customerAbout():
     user = session['name']
-    # if request.method == "POST":
-    #     details = request.form
-    #     name = details['name']
-    #     session['name'] = details['name']
-    #     accountNum = details['accountNum']
-    #     password = details['password']
-    #     email = details['email']
-    #     print(email)
-    #     cur = mysql.connection.cursor()
-    #     cur.execute(
-    #         "INSERT INTO cunsumer(cName,password,accountNum,email) VALUES (%s, %s, %s, %s)", (name, password, accountNum, email))
-    #     mysql.connection.commit()
-    #     cur.close()
+    if request.method == "POST":
+        details = request.form
+        name = details['name']
+        session['name'] = details['name']
+        accountNum = details['accountNum']
+        password = details['password']
+        email = details['email']
+
+        cur = mysql.connection.cursor()
+        cur.execute(
+            "UPDATE `savefood`.`cunsumer` SET `cName` = '{0}', `password` = '{1}', `accountNum` = '{2}', `email` = '{3}' WHERE (`cNo` = '{4}');".format(str(name), str(password), str(accountNum), str(email), session['cNo']))
+        mysql.connection.commit()
+        cur.close()
     #     del name, accountNum, password, email
-    #     return render_template("indexCustomer.html")
+        return redirect(url_for("indexCustome",))
     if request.method == "GET":
         cur = mysql.connection.cursor()
         cNo = session['cNo']
@@ -144,16 +152,8 @@ def customerAbout():
         mysql.connection.commit()
         cur.close()
         return render_template("customerAbout.html", user_template=user, consumer=labels)
-    else:
-        cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM cunsumer")
-        labels = cur.fetchall()
-        mysql.connection.commit()
-        cur.close()
-        return render_template("customerAbout.html", user_template=user, consumer=labels)
 
-
-# 廠商
+        # 廠商
 
 
 @app.route('/industy_login.html', methods=['GET', 'POST'])
@@ -247,4 +247,7 @@ def industyChart():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(
+        host='0.0.0.0',
+        port=8000
+    )
