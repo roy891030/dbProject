@@ -2,4 +2,16 @@
 
 {% block content %}
 
+<form action="" method="POST">
+    {% for label in shoppingCart %}
+<input name="shoppingCart" value="{{label}}" class="form-check-input mt-0" type="checkbox">
+    <label class="form-check-label"
+        for="flexCheckDefault">{{label}}</label>
+    
+    <br>
+
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{{shoppingCart}}
 {% endblock %}

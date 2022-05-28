@@ -9,5 +9,21 @@
         <p class="lead">Welcome to SaveFood!</p>
     </div>
 </div>
+<br><br>
+
+
+
+<br>
+<br>
+<form action="" method="POST">
+
+    {% for label in consumer %}
+        
+        <label  class="form-check-label" for="flexCheckDefault">{{label[0],label[1],label[2],label[3],label[4],label[5],label[6],label[7],label[8]}}</label>
+        <input name="shoppingCart" value="{{label}}" class="form-check-input mt-0" type="checkbox"  >
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
 
 {% endblock %}
