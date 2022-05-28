@@ -27,7 +27,7 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 # industy上傳的資料show在他的product，並且解決 photo 還有欄位錯誤問題 (hard) //竟然解決了
 # industy index 中可以顯示他想要的七個功能 (easy) //先做這個 //解決
 # 將所有industy show在customer的index中 (mid) // 解決
-#######待辦事項########
+#######待辦事項#########
 
 
 #######待辦事項5/28#####
