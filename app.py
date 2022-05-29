@@ -24,7 +24,11 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 # 欄位錯誤的問題可能是html 表單設計順序要改的跟後端一樣
 
 #######待辦事項5/29#####
-# cunsumer 送出的訂單會呈現在 industy 的 order 上
+# cunsumer 送出的訂單會呈現在 industy 的 order 上 //解決
+# industy 按下 違反規定、確認皆可以刪除order 一個會將cunsumer violation 加一，一個不會  //hard
+# 美化 order // easy
+# 美化 carts // easy
+# 照片上傳問題 // hard
 #######待辦事項########
 
 app = Flask(__name__)
@@ -149,8 +153,6 @@ def indexCustome():
 
         return render_template("indexCustomer.html", user=user, consumer=labels)
 
-# 幹 list 問題 要怎麼好好地把字串傳送好
-
 
 @app.route('/customerCart.html', methods=['GET', 'POST'])
 def customerCart():
@@ -185,8 +187,19 @@ def customerCart():
         mysql.connection.commit()
         return render_template("indexCustomer.html", user=user, consumer=labels)
     else:
+        command = "SELECT cunsumer.cName,product.pName,product.price,product.pExpire,product.pimg,industy.iName,industy.iAddress\
+        FROM cart\
+        INNER JOIN cunsumer ON  cart.cNo= cunsumer.cNo\
+        INNER JOIN product ON cart.pNo=product.pNo\
+        inner Join industy on cart.iNo=industy.iNo\
+        where cunsumer.cNo ={}"
+        cNo = session['cNo']
+        cur = mysql.connection.cursor()
+        cur.execute(command.format(cNo))
+        labels = cur.fetchall()
+        mysql.connection.commit()
         shoppingCart = session['shoppingCart']
-        return render_template("customerCart.html", shoppingCart=shoppingCart)
+        return render_template("customerCart.html", shoppingCart=labels)
 
 
 @ app.route('/customerAbout.html', methods=['GET', 'POST'])
