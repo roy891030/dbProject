@@ -23,21 +23,8 @@ UPLOAD_FOLDER = '\static'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 # 欄位錯誤的問題可能是html 表單設計順序要改的跟後端一樣
 
-#######待辦事項5/26####
-# industy上傳的資料show在他的product，並且解決 photo 還有欄位錯誤問題 (hard) //竟然解決了
-# industy index 中可以顯示他想要的七個功能 (easy) //先做這個 //解決
-# 將所有industy show在customer的index中 (mid) // 解決
-#######待辦事項#########
-
-
-#######待辦事項5/28#####
-# cunsumer 點 submit 後 送到 shopping cart //解決
-# shopping cart 點選傳送後 送出訂單 shopping cart 那邊有 list 的問題
-# cunsumer 送出的訂單會呈現在 industy 的 order 上
-#######待辦事項########
-
 #######待辦事項5/29#####
-# 美化indexCustomer
+# cunsumer 送出的訂單會呈現在 industy 的 order 上
 #######待辦事項########
 
 app = Flask(__name__)
@@ -148,7 +135,7 @@ def indexCustome():
         for i in shoppingCart:
             cur = mysql.connection.cursor()
             command = "INSERT INTO `savefood`.`cart` (`cNo`,`pNo`,`iNo`) VALUES ('{}','{}','{}')"
-            cur.execute(command.format(str(cNo), i[1:4], i[5:10]))
+            cur.execute(command.format(str(cNo), i[1:5], i[6:11]))
             mysql.connection.commit()
             cur.close()
         return redirect(url_for("customerCart"))
@@ -169,17 +156,34 @@ def indexCustome():
 def customerCart():
 
     if request.method == "POST":
-        x = random.randrange(1, 1000)
+        # x = random.randrange(1, 1000)
+        cNo = session['cNo']
         shoppingCart = session['shoppingCart']
-        shoppingCartList = eval(shoppingCart[0])
-        for i in shoppingCartList:
+        # shoppingCartList = eval(shoppingCart[0])
+        for i in shoppingCart:
             cur = mysql.connection.cursor()
-            cur.execute(
-                "INSERT INTO `savefood`.`transaction` (`cNo`,`transTime`) VALUES(%s,%s)", ((
-                    str(session['cNo']),  datetime.date.today())))
+            command = "INSERT INTO `savefood`.`records` (`pNo`,`cNo`,`iNo`) VALUES ('{}','{}','{}')"
+            cur.execute(command.format(i[1:5], str(cNo), i[6:11]))
             mysql.connection.commit()
             cur.close()
-        return redirect(url_for("indexCustome",))
+            cur = mysql.connection.cursor()
+            command = "DELETE FROM `savefood`.`product` WHERE (`pNo` = {})"
+            cur.execute(command.format(i[1:5]))
+            cur.close()
+        user = session['name']
+        cur = mysql.connection.cursor()
+        cNo = session['cNo']
+        command = "SELECT product.pNo, industy.iNo,product.pName, product.price, product.pExpire, product.uploadDate, industy.iName, industy.iAddress, industy.iPhone FROM product inner join industy on product.iNo = industy.iNo order by iName"
+        cur.execute(command)
+        labels = cur.fetchall()
+        mysql.connection.commit()
+
+        cur = mysql.connection.cursor()
+        cNo = session['cNo']
+        command = "DELETE FROM cart WHERE (cart.cNo = '{}')"
+        cur.execute(command.format(cNo))
+        mysql.connection.commit()
+        return render_template("indexCustomer.html", user=user, consumer=labels)
     else:
         shoppingCart = session['shoppingCart']
         return render_template("customerCart.html", shoppingCart=shoppingCart)
@@ -286,15 +290,6 @@ def industyProducty():
     return render_template("indexIndusty.html")
 
 
-################ UPLOAD的時候欄位錯亂 ################
-    # session['name'] = details['name']
-    # cur = mysql.connection.cursor()
-    # command = "SELECT * FROM industy WHERE iName= '%s'"
-    # cur.execute(command % name)
-    # mysql.connection.commit()
-    # result = cur.fetchall()
-    # cur.close()
-
 @ app.route('/industyUpload.html', methods=['GET', 'POST'])
 def industyUpload():
     if request.method == "POST":
@@ -310,9 +305,9 @@ def industyUpload():
         price = details['price']
         pExpire = details['pExpire']
         pimg = details['pimg']
-        pNo = random.randrange(1, 1000)
+        pNo = random.randrange(1000, 9999)
         cur = mysql.connection.cursor()
-        x = random.randrange(1, 1000)
+        x = random.randrange(1000, 9999)
         cur.execute(
             "INSERT INTO product(pNo,pName,price,pExpire,pimg,iNo,uploadDate) VALUES (%s,%s, %s, %s, %s, %s, %s)", (x, pName, price, pExpire, pimg, str(result[0][0]), datetime.date.today()))
         mysql.connection.commit()
@@ -324,7 +319,14 @@ def industyUpload():
 
 @ app.route('/industyOrder.html', methods=['GET'])
 def industyOrder():
-    return render_template("industyOrder.html")
+    iNo = session['iNo']
+    cur = mysql.connection.cursor()
+    command = "SELECT iName,cName,email,violation,pName,price FROM((records INNER JOIN industy ON records.iNo = industy.iNo)INNER JOIN cunsumer ON records.cNo = cunsumer.cNo)INNER JOIN product ON records.pNo = product.pNo where records.iNo={}"
+    cur.execute(command.format(iNo))
+    mysql.connection.commit()
+    result = cur.fetchall()
+    cur.close()
+    return render_template("industyOrder.html", result=result)
 
 
 @ app.route('/industyForum.html', methods=['GET'])
