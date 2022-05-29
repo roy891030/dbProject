@@ -168,10 +168,10 @@ def customerCart():
             cur.execute(command.format(i[1:5], str(cNo), i[6:11]))
             mysql.connection.commit()
             cur.close()
-            cur = mysql.connection.cursor()
-            command = "DELETE FROM `savefood`.`product` WHERE (`pNo` = {})"
-            cur.execute(command.format(i[1:5]))
-            cur.close()
+            # cur = mysql.connection.cursor()
+            # command = "DELETE FROM `savefood`.`product` WHERE (`pNo` = {})"
+            # cur.execute(command.format(i[1:5]))
+            # cur.close()
         user = session['name']
         cur = mysql.connection.cursor()
         cNo = session['cNo']
@@ -300,7 +300,6 @@ def industyProducty():
         result = cursor.fetchall()
         cursor.close()
         return render_template("industyProduct.html", product=result)
-    return render_template("indexIndusty.html")
 
 
 @ app.route('/industyUpload.html', methods=['GET', 'POST'])
@@ -332,14 +331,17 @@ def industyUpload():
 
 @ app.route('/industyOrder.html', methods=['GET'])
 def industyOrder():
-    iNo = session['iNo']
-    cur = mysql.connection.cursor()
-    command = "SELECT iName,cName,email,violation,pName,price FROM((records INNER JOIN industy ON records.iNo = industy.iNo)INNER JOIN cunsumer ON records.cNo = cunsumer.cNo)INNER JOIN product ON records.pNo = product.pNo where records.iNo={}"
-    cur.execute(command.format(iNo))
-    mysql.connection.commit()
-    result = cur.fetchall()
-    cur.close()
-    return render_template("industyOrder.html", result=result)
+    if request.method == "post":
+        return render_template("industyOrder.html", result=result)
+    else:
+        iNo = session['iNo']
+        cur = mysql.connection.cursor()
+        command = "SELECT iName,cName,email,violation,pName,price FROM((records INNER JOIN industy ON records.iNo = industy.iNo)INNER JOIN cunsumer ON records.cNo = cunsumer.cNo)INNER JOIN product ON records.pNo = product.pNo where records.iNo={}"
+        cur.execute(command.format(iNo))
+        mysql.connection.commit()
+        result = cur.fetchall()
+        cur.close()
+        return render_template("industyOrder.html", result=result)
 
 
 @ app.route('/industyForum.html', methods=['GET'])

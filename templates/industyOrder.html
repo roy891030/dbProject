@@ -1,5 +1,25 @@
 {% extends 'baseILogin.html' %}
 
 {% block content %}
-{{result}}
+{% for label in result %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col">
+            <div class="card" style="width: 100%;">
+                <img class="card-img-top" src="..." alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">{{label[4]}}</h5>
+                    <p class="card-text">${{label[5]}}</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Cunsumer : {{label[1]}}</li>
+                    <li class="list-group-item">Violation : {{label[3]}}</li>
+                </ul>
+            </div>
+            <br>
+        </div>
+    </div>
+</div>
+<br>
+{% endfor %}
 {% endblock %}

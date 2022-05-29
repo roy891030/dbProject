@@ -3,11 +3,36 @@
 {% block content %}
 
 
+<form method="POST">
+<button type="button" class="btn btn-danger">DELETE</button>
+{% for label in product %}
+<div class="container">
 
-{% for i in product %}
-    {{i}}
-    <br>
+    <div class="row justify-content-center">
+        <div class="col">
+            
+            <input name="pId" value="{{label[0]}}" class="form-check-input mt-0" type="checkbox">
+            </form>
+            <div class="card" style="width: 100%;">
+                
+                <img class="card-img-top" src="..." alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">{{label[1]}}</h5>
+                    <p class="card-text">${{label[2]}}</p>
+                    <p name="pId" class="card-text" value="{{label[0]}}">No. {{label[0]}}</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Expire date : {{label[3]}}</li>
+                    <li class="list-group-item">Upload date : {{label[7]}}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+<br>
 {% endfor %}
+
 
 
 
