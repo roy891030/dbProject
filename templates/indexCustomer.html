@@ -16,14 +16,36 @@
 <br>
 <br>
 <form action="" method="POST">
+<button type="submit" class="btn btn-primary">Submit</button>
 
-    {% for label in consumer %}
-        
-        <label  class="form-check-label" for="flexCheckDefault">{{label[0],label[1],label[2],label[3],label[4],label[5],label[6],label[7],label[8]}}</label>
-        <input name="shoppingCart" value="{{label}}" class="form-check-input mt-0" type="checkbox"  >
-    {% endfor %}
-    <button type="submit" class="btn btn-primary">Submit</button>
+{% for label in consumer %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col">
+                <div class="card" style="width: 100%;">
+                    <img class="card-img-top" src="..." alt="Card image cap">
+                    <div class="card-body">
+                        <input name="shoppingCart" value="{{label}}" class="form-check-input mt-0" type="checkbox">
+                        <h5 class="card-title">{{label[6]}}</h5>
+                        <p class="card-text">{{label[2]}} ${{label[3]}}</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Address : {{label[7]}}</li>
+                        <li class="list-group-item">Phone : {{label[8]}}</li>
+                        <li class="list-group-item">Expire date : {{label[4]}}</li>
+                        <li class="list-group-item">Upload date : {{label[5]}}</li>
+                    </ul>
+                </div>
+            <br>
+        </div>        
+    </div>
+</div>
+        <!-- <label  class="form-check-label" for="flexCheckDefault">{{label[0],label[1],label[2],label[3],label[4],label[5],label[6],label[7],label[8]}}</label> -->  
+{% endfor %}
+
 </form>
 
+    {% for label in consumer %}
 
+    {% endfor %}
 {% endblock %}

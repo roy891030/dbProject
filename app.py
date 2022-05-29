@@ -36,6 +36,10 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 # cunsumer 送出的訂單會呈現在 industy 的 order 上
 #######待辦事項########
 
+#######待辦事項5/29#####
+# 美化indexCustomer
+#######待辦事項########
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "mis"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -135,16 +139,16 @@ def indexCustome():
         cNo = session['cNo']
         shoppingCart = request.form.getlist('shoppingCart')
         session['shoppingCart'] = shoppingCart
-        cur = mysql.connection.cursor()
-        command = "SELECT product.pNo, industy.iNo FROM product inner join industy on product.iNo = industy.iNo order by iName"
-        cur.execute(command)
-        cart = cur.fetchall()
-        mysql.connection.commit()
-        cur.close()
-        for i in cart:
+        # cur = mysql.connection.cursor()
+        # command = "SELECT product.pNo, industy.iNo FROM product inner join industy on product.iNo = industy.iNo order by iName"
+        # cur.execute(command)
+        # cart = cur.fetchall()
+        # mysql.connection.commit()
+        # cur.close()
+        for i in shoppingCart:
             cur = mysql.connection.cursor()
             command = "INSERT INTO `savefood`.`cart` (`cNo`,`pNo`,`iNo`) VALUES ('{}','{}','{}')"
-            cur.execute(command.format(str(cNo), i[0], i[1]))
+            cur.execute(command.format(str(cNo), i[1:4], i[5:10]))
             mysql.connection.commit()
             cur.close()
         return redirect(url_for("customerCart"))
@@ -251,7 +255,7 @@ def industy_register():
         address = details['address']
         password = details['password']
         phone = details['phone']
-        x = random.randrange(1, 100000)
+        x = random.randrange(1000, 9999)
         cur = mysql.connection.cursor()
         cur.execute(
             "INSERT INTO industy(iNo,iName,iAddress,iPhone,password) VALUES (%s,%s, %s, %s, %s)", (x, name, address, phone, password))
