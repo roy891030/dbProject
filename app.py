@@ -146,7 +146,7 @@ def indexCustome():
     else:
         cur = mysql.connection.cursor()
         cNo = session['cNo']
-        command = "SELECT product.pNo, industy.iNo,product.pName, product.price, product.pExpire, product.uploadDate, industy.iName, industy.iAddress, industy.iPhone FROM product inner join industy on product.iNo = industy.iNo order by iName"
+        command = "SELECT product.pNo, industy.iNo,product.pName, product.price, product.pExpire, product.uploadDate, industy.iName, industy.iAddress, industy.iPhone,product.pimg FROM product inner join industy on product.iNo = industy.iNo order by iName"
         cur.execute(command)
         labels = cur.fetchall()
         mysql.connection.commit()
@@ -175,7 +175,7 @@ def customerCart():
         user = session['name']
         cur = mysql.connection.cursor()
         cNo = session['cNo']
-        command = "SELECT product.pNo, industy.iNo,product.pName, product.price, product.pExpire, product.uploadDate, industy.iName, industy.iAddress, industy.iPhone FROM product inner join industy on product.iNo = industy.iNo order by iName"
+        command = "SELECT product.pNo, industy.iNo,product.pName, product.price, product.pExpire, product.uploadDate, industy.iName, industy.iAddress, industy.iPhone, product.pimg FROM product inner join industy on product.iNo = industy.iNo order by iName"
         cur.execute(command)
         labels = cur.fetchall()
         mysql.connection.commit()
@@ -316,15 +316,17 @@ def industyUpload():
         pName = details['name']
         price = details['price']
         pExpire = details['pExpire']
-        pimg = details['pimg']
+        file = request.files["pimg"]
+        file.save(os.path.join("static", file.filename))
+        pimg = str("/static/"+file.filename)
         pNo = random.randrange(1000, 9999)
         cur = mysql.connection.cursor()
         x = random.randrange(1000, 9999)
         cur.execute(
-            "INSERT INTO product(pNo,pName,price,pExpire,pimg,iNo,uploadDate) VALUES (%s,%s, %s, %s, %s, %s, %s)", (x, pName, price, pExpire, pimg, str(result[0][0]), datetime.date.today()))
+            "INSERT INTO product(pNo,pName,price,pExpire,iNo,uploadDate,pimg) VALUES (%s, %s, %s, %s, %s, %s, %s)", (x, pName, price, pExpire, str(result[0][0]), datetime.date.today(), pimg))
         mysql.connection.commit()
         cur.close()
-        del pNo, pExpire, pName, pimg, price
+        del pNo, pExpire, pName, price
         return render_template("indexIndusty.html")
     return render_template("industyUpload.html")
 
