@@ -1,5 +1,55 @@
+
+
+
+<head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js">
+    </script>
+    <script type="text/javascript">
+        google.charts.load('current', { packages: ['corechart'] });     
+    </script>
+</head>
 {% extends 'baseILogin.html' %}
 
 {% block content %}
 
+<h1 class="display-3">YOUR STAR DISTRIBUTION</h1>
+<div class="container">
+    <div class="row">
+        <div class="col">
+                <div id="container" style="width: 700px; height: 400px; margin: 0 auto">
+                </div>
+        </div>
+        <div class="col">
+
+        </div>
+        <div class="col">
+
+        </div>
+    </div>
+</div>
+
+
+
+
+    <script language="JavaScript">
+        function drawChart() {
+            // Define the chart to be drawn.
+            var data = google.visualization.arrayToDataTable([
+                ['star', 'amount'],
+                ['zero', {{contain[0]| safe}}],
+                ['⭐', {{ contain[1]| safe }}],
+                ['⭐⭐', {{ contain[2]| safe }}],
+                ['⭐⭐⭐', {{ contain[3]| safe }}],
+                ['⭐⭐⭐⭐', {{ contain[4]| safe }}],
+                ['⭐⭐⭐⭐⭐', {{ contain[5] | safe }}]
+            ]);
+
+            var options = { title: '' };
+
+            // Instantiate and draw the chart.
+            var chart = new google.visualization.BarChart(document.getElementById('container'));
+            chart.draw(data, options);
+        }
+        google.charts.setOnLoadCallback(drawChart);
+    </script>
 {% endblock %}

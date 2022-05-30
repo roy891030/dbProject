@@ -1,3 +1,5 @@
+from itertools import starmap
+import numpy as np
 from cgitb import reset
 from email.message import EmailMessage
 from logging.handlers import RotatingFileHandler
@@ -19,6 +21,8 @@ from wtforms import FileField
 import random
 import os
 import datetime
+import json
+import numpy as np
 UPLOAD_FOLDER = '\static'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 # 欄位錯誤的問題可能是html 表單設計順序要改的跟後端一樣
@@ -377,12 +381,40 @@ def industyOrder():
 
 @ app.route('/industyForum.html', methods=['GET'])
 def industyForum():
-    return render_template("industyForum.html")
+    name = session['name']
+    cur = mysql.connection.cursor()
+    command = "SELECT fname,cMessage,score \
+        from savefood.message \
+        where iName = '{}'"
+    cur.execute(command.format(name))
+    mysql.connection.commit()
+    message = cur.fetchall()
+    cur.close()
+    return render_template("industyForum.html", message=message)
 
 
 @ app.route('/industyChart.html', methods=['GET'])
 def industyChart():
-    return render_template("industyChart.html")
+    name = session['name']
+    contain = []
+    star = []
+    for i in range(0, 6):
+        star = calculateStar(name, i)
+        contain.append(len(star))
+
+    return render_template("industyChart.html", contain=contain)
+
+
+def calculateStar(name, number):
+    cur = mysql.connection.cursor()
+    command = "SELECT score \
+                FROM savefood.message \
+                where iName='{}' and score ={}"
+    cur.execute(command.format(name, number))
+    mysql.connection.commit()
+    result = cur.fetchall()
+    cur.close()
+    return result
 
 
 if __name__ == '__main__':
