@@ -27,7 +27,7 @@
 
                     <div class="card-body">
                         <input name="shoppingCart" value="{{label}}" class="form-check-input mt-0" type="checkbox">
-                        <h5 class="card-title">{{label[6]}}</h5>
+                        <a class="link-secondary" href="{{ url_for('customerForum',name= label[6])}}"><h5 class="card-title" name="industyName" value="{{label[6]}}">{{label[6]}}</h5></a>
                         <p class="card-text">{{label[2]}} ${{label[3]}}</p>
                     </div>
                     <ul class="list-group list-group-flush">
