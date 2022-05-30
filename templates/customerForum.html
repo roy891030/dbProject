@@ -4,4 +4,45 @@
 <h1 class="display-1">{{name}}'s Shop</h1>
 
 <h1 class="display-3">>> Leave Your message here !</h1>
+
+<br>
+<br>
+<form method="post">
+    <div class="form-group">
+        <label for="exampleFormControlTextarea1" >😍YOUR title</label>
+        <input name="fName" type="text" class="form-control" >
+    </div>
+    <label for="customRange2" class="form-label">💯SCORE (0~5)</label>
+    <input name="score" type="range" class="form-range" min="0" max="5" id="customRange2">
+    <div class="form-group">
+        <label for="exampleFormControlTextarea1">📝TEXT AREA</label>
+        <textarea name="cMessage" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<br>
+<br>
+<hr>
+<br>
+<br>
+<h1 class="display-4">>>COMMENTS</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">TITLE</th>
+            <th scope="col">SCORE</th>
+            <th scope="col">MESSAGE</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for i in message%}
+        <tr>
+            <td>{{i[0]}}</td>
+            <td>{{i[2]}}</td>
+            <td>{{i[1]}}</td>
+        </tr>
+        {% endfor%}
+    </tbody>
+</table>
+
 {% endblock %}

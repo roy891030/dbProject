@@ -283,10 +283,33 @@ def industy_register():
     return render_template("industy_register.html")
 
 
-@ app.route('/customerForum<name>', methods=['GET'])
+@ app.route('/customerForum<name>', methods=['GET', 'POST'])
 def customerForum(name):
+    if request.method == "POST":
+        details = request.form
+        fName = details['fName']
+        cMessage = details['cMessage']
+        score = details['score']
+        cNo = session['cNo']
+        cur = mysql.connection.cursor()
+        command = "INSERT INTO `savefood`.`message` (`fName`, `iName`, `cNo`, `cMessage`, `score`) VALUES (%s,%s,%s, %s, %s)"
+        cur.execute(command, (str(fName), str(name),
+                    str(cNo), str(cMessage), str(score)))
+        mysql.connection.commit()
+        cur.close()
+        return redirect(url_for('indexCustome'))
     # industyName = session['industyName']
-    return render_template("customerForum.html", name=name)
+    else:
+        iName = name
+        cur = mysql.connection.cursor()
+        command = "SELECT fname,cMessage,score \
+                from savefood.message \
+                where iName = '{}'"
+        cur.execute(command.format(name))
+        mysql.connection.commit()
+        message = cur.fetchall()
+        cur.close()
+        return render_template("customerForum.html", name=name, message=message)
 
 
 @ app.route('/indexIndusty.html', methods=['GET'])
