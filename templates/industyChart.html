@@ -6,6 +6,7 @@
     </script>
     <script type="text/javascript">
         google.charts.load('current', { packages: ['corechart'] });     
+        google.charts.setOnLoadCallback(drawChart);
     </script>
 </head>
 {% extends 'baseILogin.html' %}
@@ -19,9 +20,12 @@
                 <div id="container" style="width: 700px; height: 400px; margin: 0 auto">
                 </div>
         </div>
-        <div class="col">
 
+        <div class="col">
+        <div id="result" style="width: 700px; height: 400px; margin: 0 auto">
+        {{result}}
         </div>
+
         <div class="col">
 
         </div>
@@ -52,4 +56,7 @@
         }
         google.charts.setOnLoadCallback(drawChart);
     </script>
+
+
+
 {% endblock %}

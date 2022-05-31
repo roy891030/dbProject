@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 from itertools import starmap
 import numpy as np
 from cgitb import reset
@@ -401,8 +402,16 @@ def industyChart():
     for i in range(0, 6):
         star = calculateStar(name, i)
         contain.append(len(star))
-
-    return render_template("industyChart.html", contain=contain)
+    iNo = session['iNo']
+    results = list(yourUpload(iNo))
+    result = []
+    date = []
+    num = []
+    for j in range(0, len(results[0])+1):
+        result.append(list(results[j]))
+        date.append(result[j][0])
+        num.append(result[j][1])
+    return render_template("industyChart.html", contain=contain, result=result)
 
 
 def calculateStar(name, number):
@@ -411,6 +420,20 @@ def calculateStar(name, number):
                 FROM savefood.message \
                 where iName='{}' and score ={}"
     cur.execute(command.format(name, number))
+    mysql.connection.commit()
+    result = cur.fetchall()
+    cur.close()
+    return result
+
+
+def yourUpload(iNo):
+    cur = mysql.connection.cursor()
+    command = "SELECT uploadDate  ,count(uploadDate) \
+            FROM savefood.product \
+            where iNo = '{}' \
+            group by iNo,uploadDate \
+            order by uploadDate"
+    cur.execute(command.format(iNo))
     mysql.connection.commit()
     result = cur.fetchall()
     cur.close()
