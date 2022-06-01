@@ -370,22 +370,50 @@ def industyUpload():
     return render_template("industyUpload.html")
 
 
-@ app.route('/industyOrder.html', methods=['GET', 'post'])
+@ app.route('/industyOrder.html', methods=['GET', 'POST'])
 def industyOrder():
-    if request.method == "post":
-        # pId = request.form.getlist('pId')
-        # session['pId'] = pId
-        # for i in pId:
-        #     cur = mysql.connection.cursor()
-        #     command = "DELETE FROM `savefood`.`product` WHERE (`pNo` = '{}');"
-        #     cur.execute(command.format(i[1:5]))
-        #     mysql.connection.commit()
-        #     cur.close()
-        return redirect(url_for('indexIndusty'))
+    if request.method == "POST":
+        if request.form['action'] == 'Get':
+            product = request.form.getlist('product')
+            for i in product:
+                cur = mysql.connection.cursor()
+                command = "DELETE FROM `savefood`.`product` WHERE (`pNo` = '{}')"
+                cur.execute(command.format(i[1:5]))
+                mysql.connection.commit()
+                cur.close()
+
+                cur = mysql.connection.cursor()
+                command = "DELETE FROM `savefood`.`records` WHERE (`pNo` = '{}' and `cNo` = '{}')"
+                cur.execute(command.format(str(i[1:5]), str(i[6:10])))
+                mysql.connection.commit()
+                cur.close()
+            return redirect(url_for("industyOrder"))
+
+        if request.form['action'] == 'Violation':
+            product = request.form.getlist('product')
+            for i in product:
+                cur = mysql.connection.cursor()
+                command = "DELETE FROM `savefood`.`product` WHERE (`pNo` = '{}')"
+                cur.execute(command.format(i[1:5]))
+                mysql.connection.commit()
+                cur.close()
+
+                cur = mysql.connection.cursor()
+                command = "DELETE FROM `savefood`.`records` WHERE (`pNo` = '{}' and `cNo` = '{}')"
+                cur.execute(command.format(i[1:5], i[7:11]))
+                mysql.connection.commit()
+                cur = mysql.connection.cursor()
+                command = "UPDATE `savefood`.`cunsumer` SET `violation` = '%s' WHERE (`cNo` = '%s')"
+                cur.execute(command % ('1', i[7:11]))
+                mysql.connection.commit()
+                cur.close()
+
+            return redirect(url_for("industyOrder"))
+
     else:
         iNo = session['iNo']
         cur = mysql.connection.cursor()
-        command = "SELECT iName,cName,email,violation,pName,price FROM((records INNER JOIN industy ON records.iNo = industy.iNo)INNER JOIN cunsumer ON records.cNo = cunsumer.cNo)INNER JOIN product ON records.pNo = product.pNo where records.iNo={}"
+        command = "SELECT product.pNo, cunsumer.cNo,iName,cName,email,violation,pName,price,pimg FROM((records INNER JOIN industy ON records.iNo = industy.iNo)INNER JOIN cunsumer ON records.cNo = cunsumer.cNo)INNER JOIN product ON records.pNo = product.pNo where records.iNo={}"
         cur.execute(command.format(iNo))
         mysql.connection.commit()
         result = cur.fetchall()
