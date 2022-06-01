@@ -1,15 +1,13 @@
 {% extends 'baseCLogin.html' %}
-
 {% block content %}
-<h1 class="display-1">{{name}}'s Shop</h1>
 
-<h1 class="display-3">>> Leave Your message here !</h1>
-
+<h1 class="display-1" style="font-family: lobster;">{{name}}'s Shop</h1>
+<h5 class="display-6" style="font-family: khand;">>> Leave your message here !</h5>
 <br>
 <br>
-<form method="post">
+<form method="post" style="font-family: khand;">
     <div class="form-group">
-        <label for="exampleFormControlTextarea1" >😍YOUR title</label>
+        <label for="exampleFormControlTextarea1">😍YOUR title</label>
         <input name="fName" type="text" class="form-control" >
     </div>
     <label for="customRange2" class="form-label">💯SCORE (0~5)</label>
@@ -25,8 +23,8 @@
 <hr>
 <br>
 <br>
-<h1 class="display-4">>>COMMENTS</h1>
-<table class="table">
+<h1 class="display-6" style="font-family: khand;">>>COMMENTS</h1>
+<table class="table" style="font-family: khand;">
     <thead>
         <tr>
             <th scope="col">TITLE</th>
@@ -45,4 +43,33 @@
     </tbody>
 </table>
 
+<head>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<div id="container" style="width: 700px; height: 400px; margin: 0 auto"></div>
+    <script language="JavaScript">
+        google.charts.load('current', { packages: ['corechart'] });
+
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+            // Define the chart to be drawn.
+            var data = google.visualization.arrayToDataTable([
+                ['star', 'amount'],
+                ['zero', {{ contain[0]| safe }}],
+            ['⭐', {{ contain[1]| safe }}],
+            ['⭐⭐', {{ contain[2]| safe }}],
+            ['⭐⭐⭐', {{ contain[3]| safe }}],
+            ['⭐⭐⭐⭐', {{ contain[4]| safe }}],
+            ['⭐⭐⭐⭐⭐', {{ contain[5] | safe }}]
+                ]);
+
+        var options = { title: '' };
+
+        // Instantiate and draw the chart.
+        var chart = new google.visualization.BarChart(document.getElementById('container'));
+        chart.draw(data, options);
+            }
+        google.charts.setOnLoadCallback(drawChart);
+    </script>
 {% endblock %}

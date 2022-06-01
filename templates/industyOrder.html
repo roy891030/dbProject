@@ -3,31 +3,36 @@
 {% block content %}
 
 
-<form method="POST">
-    <button type="submit" name="action" value="Get" class="btn btn-primary">Get</button>
-    <button type="submit" name="action" value="Violation" class="btn btn-primary">Violation</button>
+<form method="POST" style="font-family: khand;">
+    <button type="submit" class="btn btn-danger" name="action" value="Get">DELETE</button>
+    <button type="submit" class="btn btn-danger" name="action" value="Violation">Violation</button>
+
 {% for label in result %}
-{{result}}
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col">
-            <input name="product" value="{{label}}" class="form-check-input mt-0" type="checkbox">
-            <div class="card" style="width: 20%;">
+    <div class="row justify-content-md-center">
+        <!-- <div class="col"> -->
+        <div class="col col-lg-5">
+            <input name="product" value="{{label}}"
+            class="checkbox-success form-check-input mt-0 " type="checkbox" style="width: 25px; height: 25px;">
+            <div class="card" style="width: 100%;">
                 <img class="card-img-top" src="{{label[8]}}" alt="Card image cap">
                 <div class="card-body">
                     <h5 class="card-title">{{label[6]}}</h5>
                     <p class="card-text">${{label[7]}}</p>
                 </div>
+            </div>
+        </div><div class="col col-lg-5">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">Cunsumer : {{label[3]}}</li>
                     <li class="list-group-item">Violation : {{label[5]}}</li>
                 </ul>
             </div>
-            <br>
+            <!-- <br> -->
         </div>
     </div>
 </div>
 </form>
-<br>
+<hr><br>
+
 {% endfor %}
 {% endblock %}

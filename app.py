@@ -308,7 +308,25 @@ def customerForum(name):
         mysql.connection.commit()
         message = cur.fetchall()
         cur.close()
-        return render_template("customerForum.html", name=name, message=message)
+
+        contain = []
+        star = []
+        for i in range(0, 6):
+            star = calculateStar(iName, i)
+            contain.append(len(star))
+        return render_template("customerForum.html", name=name, message=message, contain=contain)
+
+
+def calculateStar(name, number):
+    cur = mysql.connection.cursor()
+    command = "SELECT score \
+                FROM savefood.message \
+                where iName='{}' and score ={}"
+    cur.execute(command.format(name, number))
+    mysql.connection.commit()
+    result = cur.fetchall()
+    cur.close()
+    return result
 
 
 @ app.route('/indexIndusty.html', methods=['GET'])
@@ -410,7 +428,7 @@ def industyOrder():
                 mysql.connection.commit()
                 cur = mysql.connection.cursor()
                 command = "UPDATE `savefood`.`cunsumer` SET `violation` = '%s' WHERE (`cNo` = '%s')"
-                cur.execute(command % ('1', i[7:11]))
+                cur.execute(command % ('He/She is bad !!', i[7:11]))
                 mysql.connection.commit()
                 cur.close()
 
@@ -450,8 +468,11 @@ def industyChart():
         star = calculateStar(name, i)
         contain.append(len(star))
     iNo = session['iNo']
-    result=pie(iNo)
-    return render_template("industyChart.html", contain=contain,result=result )
+    result = pie(iNo)
+    label = [row[0] for row in result]
+    value = [row[1] for row in result]
+
+    return render_template("industyChart.html", contain=contain, label=label, value=value, result=result)
 
 
 def calculateStar(name, number):
@@ -466,9 +487,22 @@ def calculateStar(name, number):
     return result
 
 
+def calDate(iNo):
+    cur = mysql.connection.cursor()
+    command = "SELECT pUpload, count(pUpload) \
+                FROM savefood.iproduct \
+                where iNo = {} \
+                group by pUpload;"
+    cur.execute(command.format(iNo))
+    mysql.connection.commit()
+    result = cur.fetchall()
+    cur.close()
+    return result
+
+
 def pie(iNo):
     cur = mysql.connection.cursor()
-    command = "SELECT pName,sum(pPrice) \
+    command = "SELECT pName,count(pName) \
                 FROM savefood.iproduct \
                 where iNo = {} \
                 group by pName;"
@@ -476,6 +510,7 @@ def pie(iNo):
     mysql.connection.commit()
     result = cur.fetchall()
     cur.close()
+    result = list(result)
     return result
 
 

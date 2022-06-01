@@ -1,55 +1,45 @@
 {% extends 'baseCLogin.html' %}
 
 {% block content %}
-<!-- 想到怎樣設計比較好了，把這頁裡面的顯示數值設計成form裡的暗字，然後下面加submit，傳送後再改後端資料庫 -->
-        <div class="jumbotron jumbotron-fluid">
+<!-- 想到怎樣設計比較好了，把這頁裡面的顯示數值設計成form裡的暗字，然後下面加submit，傳送後再改後端資料庫 -->      
+<div class="jumbotron jumbotron-fluid">
             <div class="container">
-                <h1 class="display-4">{{ user_template }}'s ABOUT</h1>
-                <p class="lead">you can alter your about in this page</p>
+                <h1 class="display-4" style="font-family: khand;">{{ user_template }}'s ABOUT</h1>
+                <p class="lead" style="font-family: khand;">You can alter your about in this page...</p>
             </div>
         </div>
+        <br><br><br>
 
-        <br>
-        <br>
-        <br>
-
-<div class="container">
+<div class="container" style="font-family: khand;">
     <div class="row">
-
         <div class="col-sm-6">
             <img src="..\static\about.png" alt="" width="70%">
         </div>
-
         <div class="col-sm-6">
-                        <div class="col-sm-6">
-                            <form method="POST">
-
-                                <div class="mb-3">
-                                    <label for="exampleInputEmail1" class="form-label">Name</label>
-                                    <input type="text" name="name" class="form-control" id="exampleInputEmail1" value={{consumer[0][1]}}>
-                                    <div id="emailHelp" class="form-text">We'll never share your name with anyone else.</div>
-                                </div>
-                        
-                                <div class="mb-4">
-                                    <label for="exampleInputEmail1" class="form-label">password</label>
-                                    <input type="text" name="password" class="form-control" id="exampleInputEmail1" value={{consumer[0][2]}}>
-                                </div>
-                                <div class="mb-4">
-                                    <label for="exampleInputPassword1" class="form-label">Account Name</label>
-                                    <input type="text" name="accountNum" class="form-control" id="exampleInputPassword1" value={{consumer[0][3]}}>
-                                </div>
-                                <div class="mb-4">
-                                    <label for="exampleInputEmail1" class="form-label">Email address</label>
-                                    <input type="email" class="form-control" name="email" value={{consumer[0][4]}}>
-                        
-                                </div>
-
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </form>
-                        </div>
+            <div class="col-sm-6">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Name</label>
+                        <input type="text" name="name" class="form-control" id="exampleInputEmail1" value={{consumer[0][1]}}>
+                        <div id="emailHelp" class="form-text">We'll never share your name with anyone else.</div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="exampleInputEmail1" class="form-label">password</label>
+                        <input type="text" name="password" class="form-control" id="exampleInputEmail1" value={{consumer[0][2]}}>
+                    </div>
+                    <div class="mb-4">
+                        <label for="exampleInputPassword1" class="form-label">Account Name</label>
+                        <input type="text" name="accountNum" class="form-control" id="exampleInputPassword1" value={{consumer[0][3]}}>
+                    </div>
+                    <div class="mb-4">
+                        <label for="exampleInputEmail1" class="form-label">Email address</label>
+                        <input type="email" class="form-control" name="email" value={{consumer[0][4]}}>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
-
 
 {% endblock %}
