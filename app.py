@@ -133,12 +133,6 @@ def indexCustome():
         cNo = session['cNo']
         shoppingCart = request.form.getlist('shoppingCart')
         session['shoppingCart'] = shoppingCart
-        # cur = mysql.connection.cursor()
-        # command = "SELECT product.pNo, industy.iNo FROM product inner join industy on product.iNo = industy.iNo order by iName"
-        # cur.execute(command)
-        # cart = cur.fetchall()
-        # mysql.connection.commit()
-        # cur.close()
         for i in shoppingCart:
             cur = mysql.connection.cursor()
             command = "INSERT INTO `savefood`.`cart` (`cNo`,`pNo`,`iNo`) VALUES ('{}','{}','{}')"
@@ -322,10 +316,21 @@ def indexIndusty():
     return render_template("indexIndusty.html")
 
 
-@ app.route('/industyProduct.html', methods=['GET'])
+@ app.route('/industyProduct.html', methods=['GET', 'POST'])
 def industyProducty():
+    if request.method == "POST":
 
-    if request.method == "GET":
+        product = request.form.getlist('product')
+        print(product)
+        for i in product:
+            cur = mysql.connection.cursor()
+            command = "DELETE FROM `savefood`.`product` WHERE (`pNo` = '{}')"
+            cur.execute(command.format(i[1:5]))
+            mysql.connection.commit()
+            cur.close()
+        return redirect(url_for("industyProducty"))
+
+    else:
         iNo = session['iNo']
         cursor = mysql.connection.cursor()
         command = "SELECT * FROM savefood.product where iNo ='%s'"
@@ -365,10 +370,18 @@ def industyUpload():
     return render_template("industyUpload.html")
 
 
-@ app.route('/industyOrder.html', methods=['GET'])
+@ app.route('/industyOrder.html', methods=['GET', 'post'])
 def industyOrder():
     if request.method == "post":
-        return render_template("industyOrder.html", result=result)
+        # pId = request.form.getlist('pId')
+        # session['pId'] = pId
+        # for i in pId:
+        #     cur = mysql.connection.cursor()
+        #     command = "DELETE FROM `savefood`.`product` WHERE (`pNo` = '{}');"
+        #     cur.execute(command.format(i[1:5]))
+        #     mysql.connection.commit()
+        #     cur.close()
+        return redirect(url_for('indexIndusty'))
     else:
         iNo = session['iNo']
         cur = mysql.connection.cursor()
@@ -403,15 +416,15 @@ def industyChart():
         star = calculateStar(name, i)
         contain.append(len(star))
     iNo = session['iNo']
-    results = list(yourUpload(iNo))
-    result = []
-    date = []
-    num = []
-    for j in range(0, len(results[0])+1):
-        result.append(list(results[j]))
-        date.append(result[j][0])
-        num.append(result[j][1])
-    return render_template("industyChart.html", contain=contain, result=result)
+    # results = list(yourUpload(iNo))
+    # result = []
+    # date = []
+    # num = []
+    # for j in range(0, len(results[0])+1):
+    #     result.append(list(results[j]))
+    #     date.append(result[j][0])
+    #     num.append(result[j][1])
+    return render_template("industyChart.html", contain=contain, )
 
 
 def calculateStar(name, number):

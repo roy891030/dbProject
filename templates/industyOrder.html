@@ -1,10 +1,15 @@
 {% extends 'baseILogin.html' %}
 
 {% block content %}
+
+
+<form method="POST">
+    <button type="submit" class="btn btn-danger">DELETE</button>
 {% for label in result %}
 <div class="container">
     <div class="row justify-content-center">
         <div class="col">
+            <input name="product" value="{{label}}" class="form-check-input mt-0" type="checkbox">
             <div class="card" style="width: 100%;">
                 <img class="card-img-top" src="..." alt="Card image cap">
                 <div class="card-body">
@@ -20,6 +25,7 @@
         </div>
     </div>
 </div>
+</form>
 <br>
 {% endfor %}
 {% endblock %}

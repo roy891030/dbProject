@@ -4,15 +4,14 @@
 
 
 <form method="POST">
-<button type="button" class="btn btn-danger">DELETE</button>
+<button type="submit" class="btn btn-danger">DELETE</button>
 {% for label in product %}
 <div class="container">
 
     <div class="row justify-content-center">
         <div class="col">
+            <input name="product" value="{{label}}" class="form-check-input mt-0" type="checkbox">
             
-            <input name="pId" value="{{label[0]}}" class="form-check-input mt-0" type="checkbox">
-            </form>
             <div class="card" style="width: 100%;">
                 
                 <img class="card-img-top" src="{{label[4]}}" alt="Card image cap" style="width: 200px;">
@@ -30,6 +29,7 @@
     </div>
 
 </div>
+</form>
 <br>
 
 {% endfor %}
