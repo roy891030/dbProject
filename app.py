@@ -365,6 +365,12 @@ def industyUpload():
             "INSERT INTO product(pNo,pName,price,pExpire,iNo,uploadDate,pimg) VALUES (%s, %s, %s, %s, %s, %s, %s)", (x, pName, price, pExpire, str(result[0][0]), datetime.date.today(), pimg))
         mysql.connection.commit()
         cur.close()
+
+        cur = mysql.connection.cursor()
+        cur.execute(
+            "INSERT INTO iproduct(iNo,pName,pPrice,pUpload,pNo) VALUES (%s, %s, %s, %s,%s)", (str(result[0][0]), pName, price, datetime.date.today(), x))
+        mysql.connection.commit()
+        cur.close()
         del pNo, pExpire, pName, price
         return render_template("indexIndusty.html")
     return render_template("industyUpload.html")
@@ -444,15 +450,8 @@ def industyChart():
         star = calculateStar(name, i)
         contain.append(len(star))
     iNo = session['iNo']
-    # results = list(yourUpload(iNo))
-    # result = []
-    # date = []
-    # num = []
-    # for j in range(0, len(results[0])+1):
-    #     result.append(list(results[j]))
-    #     date.append(result[j][0])
-    #     num.append(result[j][1])
-    return render_template("industyChart.html", contain=contain, )
+    result=pie(iNo)
+    return render_template("industyChart.html", contain=contain,result=result )
 
 
 def calculateStar(name, number):
@@ -467,13 +466,12 @@ def calculateStar(name, number):
     return result
 
 
-def yourUpload(iNo):
+def pie(iNo):
     cur = mysql.connection.cursor()
-    command = "SELECT uploadDate  ,count(uploadDate) \
-            FROM savefood.product \
-            where iNo = '{}' \
-            group by iNo,uploadDate \
-            order by uploadDate"
+    command = "SELECT pName,sum(pPrice) \
+                FROM savefood.iproduct \
+                where iNo = {} \
+                group by pName;"
     cur.execute(command.format(iNo))
     mysql.connection.commit()
     result = cur.fetchall()
